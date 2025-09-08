@@ -1,0 +1,3 @@
+{
+  "sql": "WITH cte_orders AS (\n    SELECT o.id, o.customer_id, o.created_at, o.amount\n    FROM orders o\n    WHERE o.created_at >= DATE '2025-08-01'\n      AND o.created_at < DATE '2025-09-01'\n      AND o.amount > 100\n  ),\n  last_orders AS (\n    SELECT customer_id, max(created_at) AS last_order_at\n    FROM orders\n    GROUP BY customer_id\n  )\n  SELECT DISTINCT ON (c.id)\n         c.id, c.name, lo.last_order_at\n  FROM customers c\n  JOIN cte_orders co ON co.customer_id = c.id\n  LEFT JOIN last_orders lo ON lo.customer_id = c.id\n  WHERE lower(c.email) LIKE 'vip%'\n  ORDER BY c.id, lower(c.email);"
+}

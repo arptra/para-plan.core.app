@@ -1,0 +1,3 @@
+{
+  "sql": "SELECT id, amount\n    FROM orders\n    WHERE created_at >= now() - interval '30 days'\n    ORDER BY created_at DESC\n    LIMIT 500;\n"
+}

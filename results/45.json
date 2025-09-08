@@ -1,4 +1,0 @@
-{
-  "message" : "ERROR: column \"region_id\" of relation \"customers\" does not exist\n  Позиция: 230",
-  "code" : "PSQL_ERROR"
-}
