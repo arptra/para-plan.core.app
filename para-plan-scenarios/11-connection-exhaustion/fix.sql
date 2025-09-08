@@ -1,0 +1,1 @@
+-- Use a connection pooler and cap app pool size; increase max_connections only with care.

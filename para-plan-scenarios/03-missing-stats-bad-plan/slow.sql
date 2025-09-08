@@ -1,0 +1,1 @@
+SELECT count(*) FROM t WHERE a = 3 AND b BETWEEN 10 AND 20;

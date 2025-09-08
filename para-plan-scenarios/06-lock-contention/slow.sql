@@ -1,0 +1,1 @@
+SELECT * FROM acc WHERE id = 1 FOR UPDATE;
