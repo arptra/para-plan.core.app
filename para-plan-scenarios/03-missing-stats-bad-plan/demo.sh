@@ -14,7 +14,7 @@ echo "Trying EXPLAIN (may be slow or timeout)"
 psql "postgresql://paraplan:paraplan@localhost:5403/demo" -v ON_ERROR_STOP=0 -c "SET statement_timeout='5s'; EXPLAIN (ANALYZE, BUFFERS) $(cat slow.sql)" || echo "OK: observed slowness/timeout"
 
 echo "Calling analyzer (POST /api/analyze) ..."
-b64=$(base64 -w0 slow.sql 2>/dev/null || base64 -b0 slow.sql)
+b64=$(base64 -w0 slow.sql 2>/dev/null || base64 -b 0 -i slow.sql)
 curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json"   -d "{\"sqlB64\":\"$b64\",\"options\":{\"enableLandscape\":true,\"enableDcc\":true,\"mcSamples\":8}}" | jq '.' || true
 
 echo "---- FIX PHASE ----"
@@ -23,4 +23,5 @@ psql "postgresql://paraplan:paraplan@localhost:5403/demo" -v ON_ERROR_STOP=1 -f 
 echo "Re-run EXPLAIN after fix"
 psql "postgresql://paraplan:paraplan@localhost:5403/demo" -v ON_ERROR_STOP=1 -c "EXPLAIN (ANALYZE, BUFFERS) $(cat slow.sql)"
 
+docker compose down
 echo "Done."

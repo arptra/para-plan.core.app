@@ -17,8 +17,11 @@ sleep 1
 echo "Trying victim SELECT ... FOR UPDATE (expect wait/timeout)"
 timeout 3s psql "postgresql://paraplan:paraplan@localhost:5406/demo" -c "$(cat slow.sql)" || echo "OK: blocked"
 
-b64=$(printf "%s" "SELECT * FROM acc WHERE id = 1 FOR UPDATE" | base64 -w0 2>/dev/null || printf "%s" "SELECT * FROM acc WHERE id = 1 FOR UPDATE" | base64 -b0)
+b64=$(printf "%s" "SELECT * FROM acc WHERE id = 1 FOR UPDATE" | base64 -w0 2>/dev/null || printf "%s" "SELECT * FROM acc WHERE id = 1 FOR UPDATE" | base64 -b 0)
 curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" -d "{\"sqlB64\":\"$b64\"}" | jq '.advice,.recommendations'
 
 echo "Apply fix (terminate blocking session or victim)"
 psql "postgresql://paraplan:paraplan@localhost:5406/demo" -f fix.sql || true
+
+docker compose down
+echo "Done."

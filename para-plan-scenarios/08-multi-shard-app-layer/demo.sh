@@ -6,5 +6,8 @@ for port in 5411 5412; do
 done
 psql "postgresql://paraplan:paraplan@localhost:5411/shard1" -f init-shard1.sql >/dev/null
 psql "postgresql://paraplan:paraplan@localhost:5412/shard2" -f init-shard2.sql >/dev/null
-b64=$(printf "%s" "SELECT region, sum(amount) total FROM sales GROUP BY region" | base64 -w0 2>/dev/null || base64 -b0)
+b64=$(printf "%s" "SELECT region, sum(amount) total FROM sales GROUP BY region" | base64 -w0 2>/dev/null || printf "%s" "SELECT region, sum(amount) total FROM sales GROUP BY region" | base64 -b 0)
 curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" -d "{"sqlB64":"$b64"}" | jq '.recommendations'
+
+docker compose down
+echo "Done."
