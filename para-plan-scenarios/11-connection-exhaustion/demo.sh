@@ -13,7 +13,7 @@ echo "Try new connection (expect failure)"
 ! psql "postgresql://paraplan:paraplan@localhost:5413/demo" -c "SELECT 1" && echo "OK: connection refused due to max_connections"
 
 b64=$(printf "%s" "SELECT 1" | base64 -w0 2>/dev/null || printf "%s" "SELECT 1" | base64 -b 0)
-curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data '{"sqlB64":"'"$b64"'"}' | jq '.advice,.recommendations' || true
+jq -n --arg sql "$b64" '{"sqlB64":$sql}' | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.advice,.recommendations' || true
 
 docker compose down
 echo "Done."

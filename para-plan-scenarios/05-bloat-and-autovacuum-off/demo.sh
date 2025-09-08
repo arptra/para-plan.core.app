@@ -15,7 +15,7 @@ psql "postgresql://paraplan:paraplan@localhost:5405/demo" -v ON_ERROR_STOP=0 -c 
 
 echo "Calling analyzer (POST /api/analyze) ..."
 b64=$(base64 -w0 slow.sql 2>/dev/null || base64 -b 0 -i slow.sql)
-curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data '{"sqlB64":"'"$b64"'","options":{"enableLandscape":true,"enableDcc":true,"mcSamples":8}}' | jq '.' || true
+jq -n --arg sql "$b64" '{"sqlB64":$sql,"options":{"enableLandscape":true,"enableDcc":true,"mcSamples":8}}' | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.' || true
 
 echo "---- FIX PHASE ----"
 psql "postgresql://paraplan:paraplan@localhost:5405/demo" -v ON_ERROR_STOP=1 -f fix.sql
