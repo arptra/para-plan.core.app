@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id FROM customers WHERE 1000 > ALL (SELECT amount FROM orders WHERE orders.customer_id = customers.id);",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

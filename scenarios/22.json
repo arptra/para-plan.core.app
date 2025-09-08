@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT customer_id FROM orders EXCEPT SELECT customer_id FROM orders WHERE status='CANCELLED';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

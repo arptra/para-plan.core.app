@@ -1,0 +1,68 @@
+{
+  "fingerprint" : "0cf6bbbe8cb865de50b2a55fd74f76ba5f61ebbc96b84e7953049feac8ed447b",
+  "normalizedSql" : "SELECT json_build_object(?, c.id, ?, c.email) FROM customers c WHERE c.id < 50;",
+  "features" : {
+    "totalCost" : 3.47,
+    "planRows" : 49,
+    "depth" : 1,
+    "seqScans" : 0,
+    "indexScans" : 1,
+    "hashJoins" : 0,
+    "sortNodes" : 0,
+    "parallelAware" : false,
+    "functionsInFilters" : false,
+    "likeLeadingWildcard" : false
+  },
+  "predicted" : {
+    "p50ms" : 1,
+    "p95ms" : 2,
+    "tempSpillRisk" : 20,
+    "ioRisk" : 20
+  },
+  "landscape" : {
+    "baseCost" : 3.47,
+    "worstCost" : 3.47,
+    "variance" : 0.0,
+    "regret" : 0.0,
+    "robustnessScore" : 1.0,
+    "variants" : [ {
+      "toggles" : {
+        "enable_indexscan" : "on",
+        "enable_seqscan" : "off"
+      },
+      "cost" : 3.47
+    }, {
+      "toggles" : {
+        "enable_hashjoin" : "off",
+        "enable_nestloop" : "on"
+      },
+      "cost" : 3.47
+    }, {
+      "toggles" : {
+        "enable_mergejoin" : "on"
+      },
+      "cost" : 3.47
+    }, {
+      "toggles" : {
+        "enable_indexonlyscan" : "on"
+      },
+      "cost" : 3.47
+    }, {
+      "toggles" : {
+        "enable_bitmapscan" : "on"
+      },
+      "cost" : 3.47
+    } ]
+  },
+  "selectivity" : {
+    "single" : { },
+    "pairs" : { }
+  },
+  "monteCarlo" : {
+    "p50ms" : 1,
+    "p95ms" : 1,
+    "p99ms" : 1
+  },
+  "outliers" : [ ],
+  "recommendations" : [ ]
+}

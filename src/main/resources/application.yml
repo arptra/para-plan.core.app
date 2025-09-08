@@ -1,0 +1,19 @@
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/paraplan
+    username: paraplan
+    password: paraplan
+    hikari:
+      maximum-pool-size: 4
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+
+logging:
+  level:
+    root: INFO
+    dev.paraplan: DEBUG

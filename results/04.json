@@ -1,0 +1,75 @@
+{
+  "fingerprint" : "3da2738412371822085fc0f0df48ef2692f462cdef72864480453636ebebfac7",
+  "normalizedSql" : "SELECT o.id, c.name FROM orders o INNER JOIN customers c ON c.id=o.customer_id WHERE o.created_at >= now() - interval ?;",
+  "features" : {
+    "totalCost" : 9117.29,
+    "planRows" : 45440,
+    "depth" : 3,
+    "seqScans" : 2,
+    "indexScans" : 0,
+    "hashJoins" : 1,
+    "sortNodes" : 0,
+    "parallelAware" : false,
+    "functionsInFilters" : true,
+    "likeLeadingWildcard" : false
+  },
+  "predicted" : {
+    "p50ms" : 3650,
+    "p95ms" : 5840,
+    "tempSpillRisk" : 20,
+    "ioRisk" : 20
+  },
+  "landscape" : {
+    "baseCost" : 9117.29,
+    "worstCost" : 1.000001309788E10,
+    "variance" : 1.388889795869763E19,
+    "regret" : 1.0000003980589998E10,
+    "robustnessScore" : 7.199992432192433E-30,
+    "variants" : [ {
+      "toggles" : {
+        "enable_indexscan" : "on",
+        "enable_seqscan" : "off"
+      },
+      "cost" : 1.000000952058E10
+    }, {
+      "toggles" : {
+        "enable_hashjoin" : "off",
+        "enable_nestloop" : "on"
+      },
+      "cost" : 1.000001309788E10
+    }, {
+      "toggles" : {
+        "enable_mergejoin" : "on"
+      },
+      "cost" : 1.000001309788E10
+    }, {
+      "toggles" : {
+        "enable_indexonlyscan" : "on"
+      },
+      "cost" : 1.000001309788E10
+    }, {
+      "toggles" : {
+        "enable_bitmapscan" : "on"
+      },
+      "cost" : 1.000001309788E10
+    } ]
+  },
+  "selectivity" : {
+    "single" : { },
+    "pairs" : { }
+  },
+  "monteCarlo" : {
+    "p50ms" : 4111,
+    "p95ms" : 4183,
+    "p99ms" : 4205
+  },
+  "outliers" : [ ],
+  "recommendations" : [ {
+    "kind" : "SQL",
+    "title" : "Функции в предикатах",
+    "reason" : "Функция на колонке мешает использованию индекса",
+    "example" : "-- пример: CREATE INDEX CONCURRENTLY idx_fun ON table((lower(col)));",
+    "impactScore" : 30,
+    "effort" : "MEDIUM"
+  } ]
+}

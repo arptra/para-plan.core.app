@@ -1,0 +1,77 @@
+{
+  "fingerprint" : "6e60ddcbe09c6712c44f55aed638d5f896c93a9480cce343b4b42cb3ae54a6b8",
+  "normalizedSql" : "SELECT id, name FROM customers WHERE email ILIKE ? ORDER BY id DESC LIMIT 50 OFFSET 10;",
+  "features" : {
+    "totalCost" : 19.37,
+    "planRows" : 50,
+    "depth" : 2,
+    "seqScans" : 0,
+    "indexScans" : 1,
+    "hashJoins" : 0,
+    "sortNodes" : 0,
+    "parallelAware" : false,
+    "functionsInFilters" : false,
+    "likeLeadingWildcard" : true
+  },
+  "predicted" : {
+    "p50ms" : 9,
+    "p95ms" : 15,
+    "tempSpillRisk" : 20,
+    "ioRisk" : 20
+  },
+  "landscape" : {
+    "baseCost" : 19.37,
+    "worstCost" : 19.37,
+    "variance" : 0.0,
+    "regret" : 0.0,
+    "robustnessScore" : 1.0,
+    "variants" : [ {
+      "toggles" : {
+        "enable_indexscan" : "on",
+        "enable_seqscan" : "off"
+      },
+      "cost" : 19.37
+    }, {
+      "toggles" : {
+        "enable_hashjoin" : "off",
+        "enable_nestloop" : "on"
+      },
+      "cost" : 19.37
+    }, {
+      "toggles" : {
+        "enable_mergejoin" : "on"
+      },
+      "cost" : 19.37
+    }, {
+      "toggles" : {
+        "enable_indexonlyscan" : "on"
+      },
+      "cost" : 19.37
+    }, {
+      "toggles" : {
+        "enable_bitmapscan" : "on"
+      },
+      "cost" : 19.37
+    } ]
+  },
+  "selectivity" : {
+    "single" : {
+      "customers.email ILIKE '%@example.com'" : 0.1
+    },
+    "pairs" : { }
+  },
+  "monteCarlo" : {
+    "p50ms" : 10,
+    "p95ms" : 10,
+    "p99ms" : 10
+  },
+  "outliers" : [ ],
+  "recommendations" : [ {
+    "kind" : "INDEX",
+    "title" : "LIKE с ведущим %",
+    "reason" : "Рассмотрите триграммный индекс (при разрешении) либо альтернативную схему поиска",
+    "example" : "-- пример: CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE INDEX CONCURRENTLY idx_trgm ON customers USING gin (email gin_trgm_ops);",
+    "impactScore" : 60,
+    "effort" : "HIGH"
+  } ]
+}

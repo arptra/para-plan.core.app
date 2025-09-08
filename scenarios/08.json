@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM customers c CROSS JOIN regions r WHERE r.id = c.region_id AND c.id < 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

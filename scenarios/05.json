@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT o.id, c.name FROM orders o LEFT JOIN customers c ON c.id=o.customer_id ORDER BY o.id DESC LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

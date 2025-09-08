@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM customers c FULL JOIN orders o ON o.customer_id=c.id WHERE (c.id IS NULL OR o.id IS NULL) LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

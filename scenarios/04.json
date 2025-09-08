@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT o.id, c.name FROM orders o INNER JOIN customers c ON c.id=o.customer_id WHERE o.created_at >= now() - interval '14 days';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

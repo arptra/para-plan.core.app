@@ -1,0 +1,8 @@
+{
+  "sql": "DELETE FROM orders WHERE status='CANCELLED' AND created_at < now() - interval '90 days';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

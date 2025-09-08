@@ -1,0 +1,8 @@
+{
+  "sql": "WITH top_c AS (SELECT id FROM customers ORDER BY id DESC LIMIT 10) UPDATE orders SET status='SHIPPED' WHERE customer_id IN (SELECT id FROM top_c);",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

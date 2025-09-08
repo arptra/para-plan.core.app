@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT o.id, o.amount, avg(o.amount) OVER (ORDER BY o.created_at ROWS BETWEEN 10 PRECEDING AND CURRENT ROW) AS avg_win FROM orders o WHERE o.created_at >= now() - interval '60 days';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

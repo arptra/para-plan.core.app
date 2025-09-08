@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id FROM customers WHERE region_id=1 UNION ALL SELECT id FROM customers WHERE region_id=2;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

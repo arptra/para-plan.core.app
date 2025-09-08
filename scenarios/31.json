@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id FROM items WHERE meta @> '{\"color\":\"green\"}';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

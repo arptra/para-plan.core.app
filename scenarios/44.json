@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT customer_id, jsonb_agg(jsonb_build_object('id', id, 'amount', amount)) FROM orders GROUP BY customer_id LIMIT 50;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

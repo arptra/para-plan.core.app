@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT o.id, o.customer_id, o.amount, rank() OVER (PARTITION BY o.customer_id ORDER BY o.amount DESC) rnk FROM orders o WHERE o.created_at >= now() - interval '30 days';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "sql": "INSERT INTO orders (customer_id, created_at, amount, status) SELECT c.id, now(), 9.99, 'NEW' FROM customers c WHERE c.id < 5;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

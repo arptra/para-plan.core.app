@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT DISTINCT c.region_id FROM customers c;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

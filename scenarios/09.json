@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT c.id, x.total FROM customers c LEFT JOIN LATERAL (SELECT SUM(oi.qty*i.price) total FROM orders o JOIN order_items oi ON oi.order_id=o.id JOIN items i ON i.id=oi.item_id WHERE o.customer_id=c.id LIMIT 1) x ON true WHERE c.id < 500;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

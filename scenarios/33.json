@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM v_order_value WHERE calc_amount > 500 ORDER BY calc_amount DESC LIMIT 50;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

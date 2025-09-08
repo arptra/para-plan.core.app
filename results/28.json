@@ -1,0 +1,4 @@
+{
+  "message" : "ERROR: relation \"items\" does not exist\n  Позиция: 59",
+  "code" : "PSQL_ERROR"
+}

@@ -1,0 +1,8 @@
+{
+  "sql": "WITH recent AS (SELECT * FROM orders WHERE created_at > now() - interval '7 days') SELECT r.customer_id, COUNT(*) FROM recent r GROUP BY r.customer_id HAVING COUNT(*)>1 ORDER BY COUNT(*) DESC LIMIT 50;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "sql": "MERGE INTO customers c USING (VALUES (1,'X','x@mail.local',1)) AS v(id,name,email,region_id) ON c.id=v.id WHEN MATCHED THEN UPDATE SET name=v.name WHEN NOT MATCHED THEN INSERT (id,name,email,region_id) VALUES (v.id,v.name,v.email,v.region_id);",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

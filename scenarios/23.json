@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id, CASE WHEN amount>1000 THEN 'high' WHEN amount>100 THEN 'mid' ELSE 'low' END AS bucket FROM orders ORDER BY id DESC LIMIT 200;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

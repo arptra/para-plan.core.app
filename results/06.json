@@ -1,0 +1,4 @@
+{
+  "message" : "ERROR: column c.region_id does not exist\n  Позиция: 113",
+  "code" : "PSQL_ERROR"
+}

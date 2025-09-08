@@ -1,0 +1,68 @@
+{
+  "fingerprint" : "5010c7d1076b026404f34e50d241919704c9b5157623f731487b7439c6e416c2",
+  "normalizedSql" : "SELECT id FROM customers WHERE 1000 > ALL (SELECT amount FROM orders WHERE orders.customer_id = customers.id);",
+  "features" : {
+    "totalCost" : 1.489014795E8,
+    "planRows" : 25000,
+    "depth" : 2,
+    "seqScans" : 2,
+    "indexScans" : 0,
+    "hashJoins" : 0,
+    "sortNodes" : 0,
+    "parallelAware" : false,
+    "functionsInFilters" : false,
+    "likeLeadingWildcard" : false
+  },
+  "predicted" : {
+    "p50ms" : 59560592,
+    "p95ms" : 95296947,
+    "tempSpillRisk" : 20,
+    "ioRisk" : 20
+  },
+  "landscape" : {
+    "baseCost" : 1.489014795E8,
+    "worstCost" : 5.000001489014657E14,
+    "variance" : 3.4722222222220307E28,
+    "regret" : 4.999999999999862E14,
+    "robustnessScore" : 5.760000000000477E-44,
+    "variants" : [ {
+      "toggles" : {
+        "enable_indexscan" : "on",
+        "enable_seqscan" : "off"
+      },
+      "cost" : 5.000001489014657E14
+    }, {
+      "toggles" : {
+        "enable_hashjoin" : "off",
+        "enable_nestloop" : "on"
+      },
+      "cost" : 5.000001489014657E14
+    }, {
+      "toggles" : {
+        "enable_mergejoin" : "on"
+      },
+      "cost" : 5.000001489014657E14
+    }, {
+      "toggles" : {
+        "enable_indexonlyscan" : "on"
+      },
+      "cost" : 5.000001489014657E14
+    }, {
+      "toggles" : {
+        "enable_bitmapscan" : "on"
+      },
+      "cost" : 5.000001489014657E14
+    } ]
+  },
+  "selectivity" : {
+    "single" : { },
+    "pairs" : { }
+  },
+  "monteCarlo" : {
+    "p50ms" : 67089169,
+    "p95ms" : 68261040,
+    "p99ms" : 68629870
+  },
+  "outliers" : [ ],
+  "recommendations" : [ ]
+}

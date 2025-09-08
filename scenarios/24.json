@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT CAST(id AS BIGINT), COALESCE(name,'N/A') FROM customers WHERE NULLIF(email,'') IS NOT NULL LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

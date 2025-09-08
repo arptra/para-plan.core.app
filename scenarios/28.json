@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT i.id, t FROM items i, unnest(i.tags) AS t WHERE t LIKE 'grp%';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

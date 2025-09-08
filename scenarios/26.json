@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM orders WHERE status ILIKE 'PAI%' AND amount BETWEEN 50 AND 150 ORDER BY created_at DESC LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

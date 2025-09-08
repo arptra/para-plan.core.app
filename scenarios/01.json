@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id, name FROM customers WHERE email ILIKE '%@example.com' ORDER BY id DESC LIMIT 50 OFFSET 10;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

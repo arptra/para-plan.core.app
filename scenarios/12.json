@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id FROM customers WHERE id IN (SELECT customer_id FROM orders WHERE status='PAID' LIMIT 100);",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

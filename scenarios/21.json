@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT customer_id FROM orders WHERE amount>500 INTERSECT SELECT customer_id FROM orders WHERE status='PAID';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

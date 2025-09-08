@@ -1,0 +1,4 @@
+{
+  "message" : "ERROR: relation \"regions\" does not exist\n  Позиция: 76",
+  "code" : "PSQL_ERROR"
+}

@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT id FROM items WHERE meta ? 'weight';",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

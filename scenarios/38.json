@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT region_id, COUNT(*) FILTER (WHERE email ILIKE '%@example.com') AS ex_cnt FROM customers GROUP BY region_id;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

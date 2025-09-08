@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT region_id, status, sum(amount) FROM customers c JOIN orders o ON o.customer_id=c.id GROUP BY CUBE (region_id, status) LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

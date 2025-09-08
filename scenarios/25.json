@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM customers WHERE name SIMILAR TO '(User|Admin) %' AND id BETWEEN 100 AND 200;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

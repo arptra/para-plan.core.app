@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT json_build_object('id', c.id, 'email', c.email) FROM customers c WHERE c.id < 50;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT o.* FROM orders o WHERE o.created_at BETWEEN now() - interval '30 days' AND now() ORDER BY o.amount DESC LIMIT 200;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

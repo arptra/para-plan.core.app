@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT i.id FROM items i WHERE 'tag1' = ANY(i.tags);",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}

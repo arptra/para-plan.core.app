@@ -1,0 +1,8 @@
+{
+  "sql": "SELECT * FROM customers c RIGHT JOIN orders o ON o.customer_id=c.id WHERE c.region_id = 1 LIMIT 100;",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}
