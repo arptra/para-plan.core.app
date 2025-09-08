@@ -1,8 +1,8 @@
-
-package dev.paraplan.app;
+package dev.paraplan.app.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.paraplan.app.model.PlanFeatures;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;

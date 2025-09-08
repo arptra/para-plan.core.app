@@ -1,5 +1,4 @@
-
-package dev.paraplan.app;
+package dev.paraplan.app.util;
 
 public final class SqlSanitizer {
   private SqlSanitizer() {}

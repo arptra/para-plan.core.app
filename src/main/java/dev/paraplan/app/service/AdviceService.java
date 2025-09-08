@@ -1,4 +1,4 @@
-package dev.paraplan.app;
+package dev.paraplan.app.service;
 
 import dev.paraplan.app.model.*;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ public class AdviceService {
     var adv = new ArrayList<String>();
 
     if (draft.features() != null) {
-      if (draft.features().seqScan() && draft.features().estimatedRows() > 0) {
+      if (draft.features().seqScans() > 0 && draft.features().planRows() > 0) {
         adv.add("⏱ Медленно из-за SeqScan по большой таблице и/или сортировки.");
       }
-      if (draft.features().sort() && draft.predicted() != null && draft.predicted().tempSpillRisk() >= 2) {
+      if (draft.features().sortNodes() > 0 && draft.predicted() != null && draft.predicted().tempSpillRisk() >= 2) {
         adv.add("💾 Высокий риск temp spills (сортировки/хэш) — пролив во временные файлы.");
       }
     }

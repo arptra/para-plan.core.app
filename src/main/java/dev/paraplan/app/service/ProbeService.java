@@ -1,6 +1,6 @@
+package dev.paraplan.app.service;
 
-package dev.paraplan.app;
-
+import dev.paraplan.app.model.SelectivityReport;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;

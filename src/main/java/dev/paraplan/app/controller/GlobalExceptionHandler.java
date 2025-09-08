@@ -1,5 +1,5 @@
 
-package dev.paraplan.app;
+package dev.paraplan.app.controller;
 
 import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;

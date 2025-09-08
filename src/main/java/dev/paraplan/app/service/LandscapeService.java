@@ -1,6 +1,8 @@
+package dev.paraplan.app.service;
 
-package dev.paraplan.app;
-
+import dev.paraplan.app.model.LandscapeReport;
+import dev.paraplan.app.model.PlanFeatures;
+import dev.paraplan.app.model.PlanVariant;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;

@@ -1,6 +1,7 @@
+package dev.paraplan.app.service;
 
-package dev.paraplan.app;
-
+import dev.paraplan.app.model.PlanFeatures;
+import dev.paraplan.app.model.PredictedMetrics;
 import org.springframework.stereotype.Service;
 
 @Service
