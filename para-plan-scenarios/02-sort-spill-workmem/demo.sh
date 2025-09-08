@@ -14,7 +14,7 @@ echo "Trying EXPLAIN (may be slow or timeout)"
 psql "postgresql://paraplan:paraplan@localhost:5402/demo" -v ON_ERROR_STOP=0 -c "SET statement_timeout='5s'; EXPLAIN (ANALYZE, BUFFERS) $(cat slow.sql)" || echo "OK: observed slowness/timeout"
 
 echo "Calling analyzer (POST /api/analyze) ..."
-jq -Rs '{sql: .}' slow.sql | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.' || true
+curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @analyze.json | jq '.' || true
 
 echo "---- FIX PHASE ----"
 psql "postgresql://paraplan:paraplan@localhost:5402/demo" -v ON_ERROR_STOP=1 -f fix.sql

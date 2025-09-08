@@ -1,0 +1,3 @@
+{
+  "sql": "SELECT id, sku FROM items\n    WHERE updated_at >= now() - interval '7 days'\n    ORDER BY updated_at DESC\n    LIMIT 200;\n"
+}

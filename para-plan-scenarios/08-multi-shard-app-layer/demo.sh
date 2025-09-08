@@ -6,7 +6,7 @@ for port in 5411 5412; do
 done
 psql "postgresql://paraplan:paraplan@localhost:5411/shard1" -f init-shard1.sql >/dev/null
 psql "postgresql://paraplan:paraplan@localhost:5412/shard2" -f init-shard2.sql >/dev/null
-jq -Rs '{sql: .}' slow.sql | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.recommendations'
+curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @analyze.json | jq '.recommendations'
 
 docker-compose down
 echo "Done."

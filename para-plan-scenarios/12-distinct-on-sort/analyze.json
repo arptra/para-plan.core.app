@@ -1,0 +1,3 @@
+{
+  "sql": "SELECT DISTINCT ON (k) k, ts, val\n    FROM metrics\n    WHERE ts >= now() - interval '30 days'\n    ORDER BY k, ts DESC;\n"
+}

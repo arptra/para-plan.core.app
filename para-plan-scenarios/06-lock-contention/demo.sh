@@ -17,7 +17,7 @@ sleep 1
 echo "Trying victim SELECT ... FOR UPDATE (expect wait/timeout)"
 timeout 3s psql "postgresql://paraplan:paraplan@localhost:5406/demo" -c "$(cat slow.sql)" || echo "OK: blocked"
 
-jq -Rs '{sql: .}' slow.sql | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.advice,.recommendations'
+curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @analyze.json | jq '.advice,.recommendations'
 
 echo "Apply fix (terminate blocking session or victim)"
 psql "postgresql://paraplan:paraplan@localhost:5406/demo" -f fix.sql || true
