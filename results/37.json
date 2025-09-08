@@ -1,4 +1,0 @@
-{
-  "message" : "ERROR: column \"status\" of relation \"orders\" does not exist\n  Позиция: 124",
-  "code" : "PSQL_ERROR"
-}

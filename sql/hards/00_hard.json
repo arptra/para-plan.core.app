@@ -1,0 +1,8 @@
+{
+  "sql": "WITH cte_orders AS (\n  SELECT o.id, o.customer_id, o.created_at, o.amount\n  FROM orders o\n  -- антипаттерн: функция на колонке мешает pruning/индексу\n  WHERE date_trunc('month', o.created_at) = DATE '2025-08-01'\n    AND o.amount > 100\n),\ncte_agg AS (\n  SELECT oi.product_id, count(*) AS cnt\n  FROM cte_orders co\n  JOIN order_items oi ON oi.order_id = co.id\n  GROUP BY oi.product_id\n  HAVING count(*) > 10\n)\nSELECT DISTINCT ON (c.id)\n       c.id,\n       c.name,\n       -- коррелированный подзапрос (антипаттерн)\n       (SELECT max(o2.created_at)\n        FROM orders o2\n        WHERE o2.customer_id = c.id) AS last_order_at\nFROM customers c\nJOIN cte_orders co ON co.customer_id = c.id\nLEFT JOIN cte_agg a ON a.product_id = co.id % 100  -- искусственный «грязный» join-key\nWHERE lower(c.email) LIKE 'vip%'              -- функция + LIKE без покрытия\nORDER BY c.id, lower(c.email);\n",
+  "options": {
+    "enableLandscape": true,
+    "enableDcc": true,
+    "mcSamples": 25
+  }
+}
