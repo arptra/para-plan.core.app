@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-docker compose up -d
-CID=$(docker compose ps -q pg)
+docker-compose up -d
+CID=$(docker-compose ps -q pg)
 until docker exec "$CID" pg_isready -U paraplan -d demo >/dev/null 2>&1; do sleep 1; done
 psql "postgresql://paraplan:paraplan@localhost:5406/demo" -f init.sql >/dev/null
 
@@ -23,5 +23,5 @@ jq -n --arg sql "$b64" '{"sqlB64":$sql}' | curl -s -X POST http://localhost:8080
 echo "Apply fix (terminate blocking session or victim)"
 psql "postgresql://paraplan:paraplan@localhost:5406/demo" -f fix.sql || true
 
-docker compose down
+docker-compose down
 echo "Done."

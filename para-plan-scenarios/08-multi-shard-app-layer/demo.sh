@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-docker compose up -d
+docker-compose up -d
 for port in 5411 5412; do
   until PGPASSWORD=paraplan psql -h localhost -p $port -U paraplan -d shard$([ $port = 5411 ] && echo 1 || echo 2) -c "SELECT 1" >/dev/null 2>&1; do sleep 1; done
 done
@@ -9,5 +9,5 @@ psql "postgresql://paraplan:paraplan@localhost:5412/shard2" -f init-shard2.sql >
 b64=$(printf "%s" "SELECT region, sum(amount) total FROM sales GROUP BY region" | base64 | tr -d '\n')
 jq -n --arg sql "$b64" '{"sqlB64":$sql}' | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.recommendations'
 
-docker compose down
+docker-compose down
 echo "Done."

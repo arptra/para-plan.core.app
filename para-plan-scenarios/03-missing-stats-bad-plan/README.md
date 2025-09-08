@@ -10,6 +10,6 @@
 
 ## Как запустить
 ```bash
-docker compose up -d
+docker-compose up -d
 ./demo.sh
 ```

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 echo "Bringing up Postgres on port 5405..."
-docker compose up -d
-CID=$(docker compose ps -q pg)
+docker-compose up -d
+CID=$(docker-compose ps -q pg)
 echo "Waiting for DB ready..."
 until docker exec "$CID" pg_isready -U paraplan -d demo >/dev/null 2>&1; do sleep 1; done
 
@@ -23,5 +23,5 @@ psql "postgresql://paraplan:paraplan@localhost:5405/demo" -v ON_ERROR_STOP=1 -f 
 echo "Re-run EXPLAIN after fix"
 psql "postgresql://paraplan:paraplan@localhost:5405/demo" -v ON_ERROR_STOP=1 -c "EXPLAIN (ANALYZE, BUFFERS) $(cat slow.sql)"
 
-docker compose down
+docker-compose down
 echo "Done."

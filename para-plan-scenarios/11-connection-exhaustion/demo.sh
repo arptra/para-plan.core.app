@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-docker compose up -d
-CID=$(docker compose ps -q pg)
+docker-compose up -d
+CID=$(docker-compose ps -q pg)
 until docker exec "$CID" pg_isready -U paraplan -d demo >/dev/null 2>&1; do sleep 1; done
 
 echo "Open many sessions to exhaust connections..."
@@ -15,5 +15,5 @@ echo "Try new connection (expect failure)"
 b64=$(printf "%s" "SELECT 1" | base64 | tr -d '\n')
 jq -n --arg sql "$b64" '{"sqlB64":$sql}' | curl -s -X POST http://localhost:8080/api/analyze -H "Content-Type: application/json" --data @- | jq '.advice,.recommendations' || true
 
-docker compose down
+docker-compose down
 echo "Done."
