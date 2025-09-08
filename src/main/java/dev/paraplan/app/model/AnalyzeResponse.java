@@ -1,7 +1,5 @@
 package dev.paraplan.app.model;
 
-import dev.paraplan.app.*;
-
 import java.util.List;
 
 public record AnalyzeResponse(

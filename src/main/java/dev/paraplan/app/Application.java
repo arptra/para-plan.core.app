@@ -4,6 +4,7 @@ package dev.paraplan.app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import dev.paraplan.app.config.AdvisorProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties(AdvisorProperties.class)

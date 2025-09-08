@@ -1,5 +1,4 @@
-
-package dev.paraplan.app;
+package dev.paraplan.app.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

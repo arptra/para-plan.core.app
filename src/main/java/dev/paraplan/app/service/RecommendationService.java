@@ -1,5 +1,6 @@
-package dev.paraplan.app;
+package dev.paraplan.app.service;
 
+import dev.paraplan.app.config.AdvisorProperties;
 import dev.paraplan.app.model.AnalyzeResponse;
 import dev.paraplan.app.model.PlanFeatures;
 import dev.paraplan.app.model.PredictedMetrics;
@@ -30,8 +31,8 @@ public class RecommendationService {
     if (features == null || predicted == null) return out;
 
     // 1) Большой SeqScan -> индекс
-    if (features.seqScan()
-        && features.estimatedRows() >= props.getThresholds().getSeqscanRowcount()) {
+    if (features.seqScans() > 0
+        && features.planRows() >= props.getThresholds().getSeqscanRowcount()) {
       out.add(new Recommendation(
           "INDEX",
           "Добавить индекс по условию запроса",

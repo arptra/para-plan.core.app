@@ -1,4 +1,4 @@
-package dev.paraplan.app;
+package dev.paraplan.app.model;
 
 import java.util.List;
 public record LandscapeReport(

@@ -1,5 +1,4 @@
-
-package dev.paraplan.app;
+package dev.paraplan.app.util;
 
 import java.security.MessageDigest;
 import java.util.HexFormat;
