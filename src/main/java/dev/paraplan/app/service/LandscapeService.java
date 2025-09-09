@@ -5,7 +5,6 @@ import dev.paraplan.app.model.PlanFeatures;
 import dev.paraplan.app.model.PlanVariant;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -13,11 +12,11 @@ import java.util.*;
 
 @Service
 public class LandscapeService {
-    private final DataSource ds;
+    private final ConnectionRegistry connections;
     private final ExplainService explain;
-    public LandscapeService(DataSource ds, ExplainService explain) { this.ds = ds; this.explain = explain; }
+    public LandscapeService(ConnectionRegistry connections, ExplainService explain) { this.connections = connections; this.explain = explain; }
 
-    public LandscapeReport scan(String sql) throws Exception {
+    public LandscapeReport scan(String connectionId, String schema, String sql) throws Exception {
         List<Map<String,String>> toggles = List.of(
                 Map.of("enable_seqscan","off","enable_indexscan","on"),
                 Map.of("enable_hashjoin","off","enable_nestloop","on"),
@@ -25,7 +24,7 @@ public class LandscapeService {
                 Map.of("enable_indexonlyscan","on"),
                 Map.of("enable_bitmapscan","on")
         );
-        String baseJson = explain.explainJson(sql);
+        String baseJson = explain.explainJson(connectionId, schema, sql);
         PlanFeatures baseF = explain.parse(baseJson, sql);
         double baseCost = baseF.totalCost();
 
@@ -34,7 +33,7 @@ public class LandscapeService {
         List<Double> vals = new ArrayList<>();
         vals.add(baseCost);
 
-        try (Connection c = ds.getConnection()) {
+        try (Connection c = connections.getConnection(connectionId, schema)) {
             c.setAutoCommit(false);
             for (var t: toggles) {
                 try (Statement st = c.createStatement()) {

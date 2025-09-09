@@ -44,6 +44,21 @@ class ParaPlanIntegrationIT {
     @Autowired
     TestRestTemplate rest;
 
+    private String createConnection() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> payload = Map.of(
+                "host", PG.getHost(),
+                "port", PG.getMappedPort(5432),
+                "database", PG.getDatabaseName(),
+                "user", PG.getUsername(),
+                "password", PG.getPassword()
+        );
+        ResponseEntity<Map> resp = rest.postForEntity("http://localhost:" + port + "/connections",
+                new HttpEntity<>(payload, headers), Map.class);
+        return (String) resp.getBody().get("id");
+    }
+
     @Test
     @DisplayName("Analyze 100 varied SQL statements via /api/analyze")
     void analyzeHundredSql() {
@@ -51,12 +66,15 @@ class ParaPlanIntegrationIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String connId = createConnection();
 
         List<ResponseEntity<String>> responses = sqls.parallelStream()
                 .map(sql -> {
                     try {
                         Map<String, Object> payload = Map.of(
                                 "sql", sql,
+                                "connectionId", connId,
+                                "schema", "public",
                                 "options", Map.of("enableLandscape", true, "enableDcc", true, "mcSamples", 30)
                         );
                         HttpEntity<Map<String,Object>> req = new HttpEntity<>(payload, headers);

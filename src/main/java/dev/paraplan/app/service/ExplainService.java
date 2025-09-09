@@ -5,20 +5,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.paraplan.app.model.PlanFeatures;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Locale;
 
+/**
+ * Service to obtain and parse EXPLAIN plans from PostgreSQL.
+ */
+
 @Service
 public class ExplainService {
-    private final DataSource ds;
+    private final ConnectionRegistry connections;
     private static final ObjectMapper M = new ObjectMapper();
-    public ExplainService(DataSource ds) { this.ds = ds; }
+    public ExplainService(ConnectionRegistry connections) { this.connections = connections; }
 
-    public String explainJson(String sql) throws Exception {
-        try (Connection c = ds.getConnection();
+    public String explainJson(String connectionId, String schema, String sql) throws Exception {
+        try (Connection c = connections.getConnection(connectionId, schema);
              PreparedStatement ps = c.prepareStatement("EXPLAIN (FORMAT JSON, COSTS, BUFFERS) " + sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 StringBuilder sb = new StringBuilder();

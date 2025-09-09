@@ -66,8 +66,16 @@ SELECT (random()*19999)::int + 1,
 FROM generate_series(1, 90000);
 
 INSERT INTO order_items(order_id, item_id, qty)
-SELECT (random()*89999)::int + 1, (random()*799)::int + 1, (random()*5)::int + 1
-FROM generate_series(1, 180000);
+SELECT DISTINCT ON (order_id, item_id)
+       order_id, item_id, qty
+FROM (
+    SELECT (random()*89999)::int + 1 AS order_id,
+           (random()*799)::int + 1 AS item_id,
+           (random()*5)::int + 1 AS qty
+    FROM generate_series(1, 180000)
+) s
+ORDER BY order_id, item_id
+ON CONFLICT (order_id, item_id) DO NOTHING;
 
 CREATE OR REPLACE VIEW v_order_value AS
 SELECT o.id, o.customer_id, SUM(oi.qty*i.price) AS calc_amount

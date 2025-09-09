@@ -41,6 +41,21 @@ class ExtendedSqlCoverageIT {
     @Autowired
     TestRestTemplate rest;
 
+    private String createConnection() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> payload = Map.of(
+                "host", PG.getHost(),
+                "port", PG.getMappedPort(5432),
+                "database", PG.getDatabaseName(),
+                "user", PG.getUsername(),
+                "password", PG.getPassword()
+        );
+        ResponseEntity<Map> resp = rest.postForEntity("http://localhost:" + port + "/connections",
+                new HttpEntity<>(payload, headers), Map.class);
+        return (String) resp.getBody().get("id");
+    }
+
     @Test
     @DisplayName("Cover broad SQL surface (SELECT/DML/CTE/UNION/WINDOW/CASE/etc) via EXPLAIN")
     void coverBroadSql() {
@@ -48,10 +63,13 @@ class ExtendedSqlCoverageIT {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String connId = createConnection();
 
         for (String sql: sqls) {
             Map<String, Object> payload = Map.of(
                     "sql", sql,
+                    "connectionId", connId,
+                    "schema", "public",
                     "options", Map.of("enableLandscape", true, "enableDcc", true, "mcSamples", 25)
             );
             ResponseEntity<String> resp = rest.postForEntity("http://localhost:" + port + "/api/analyze",
