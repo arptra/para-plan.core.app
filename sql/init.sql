@@ -67,7 +67,8 @@ FROM generate_series(1, 90000);
 
 INSERT INTO order_items(order_id, item_id, qty)
 SELECT (random()*89999)::int + 1, (random()*799)::int + 1, (random()*5)::int + 1
-FROM generate_series(1, 180000);
+FROM generate_series(1, 180000)
+ON CONFLICT DO NOTHING;
 
 CREATE OR REPLACE VIEW v_order_value AS
 SELECT o.id, o.customer_id, SUM(oi.qty*i.price) AS calc_amount
