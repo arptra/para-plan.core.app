@@ -8,6 +8,9 @@ public record AnalyzeResponse(
     LandscapeReport landscape,
     SelectivityReport selectivity,
     Distribution distribution,
+    LockReport locks,
+    ServerFit serverFit,
+    List<String> nPlusOne,
     List<Recommendation> recommendations,
     List<String> advice
 ) {}
