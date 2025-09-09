@@ -1,0 +1,20 @@
+[
+  {
+    "start": 7,
+    "end": 8,
+    "message": "Avoid SELECT * to reduce scanned data",
+    "replacement": "SELECT column1, column2"
+  },
+  {
+    "start": 31,
+    "end": 43,
+    "message": "Leading wildcard in LIKE prevents index usage",
+    "replacement": "LIKE 'value%'"
+  },
+  {
+    "start": 31,
+    "end": 43,
+    "message": "Перепишите LIKE на 'foo%'",
+    "replacement": "LIKE '%foo%'"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "start": 7,
+    "end": 8,
+    "message": "Avoid SELECT * to reduce scanned data",
+    "replacement": "SELECT column1, column2"
+  },
+  {
+    "start": 0,
+    "end": 37,
+    "message": "Увеличьте work_mem для крупных сортировок",
+    "replacement": "SET work_mem='128MB';"
+  }
+]
