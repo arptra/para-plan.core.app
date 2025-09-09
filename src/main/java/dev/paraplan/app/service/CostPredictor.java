@@ -5,7 +5,6 @@ import dev.paraplan.app.model.PredictedMetrics;
 import dev.paraplan.app.util.SqlUtil;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +12,10 @@ import java.util.List;
 
 @Service
 public class CostPredictor {
-    private final DataSource ds;
-    public CostPredictor(DataSource ds) { this.ds = ds; }
+    private final ConnectionRegistry connections;
+    public CostPredictor(ConnectionRegistry connections) { this.connections = connections; }
 
-    public PredictedMetrics predict(String sql, PlanFeatures f) {
+    public PredictedMetrics predict(String connectionId, String schema, String sql, PlanFeatures f) {
         double base = 0.4 * f.totalCost();
         base += f.sortNodes() * 5;
         base += f.hashJoins() * 3;
@@ -25,7 +24,7 @@ public class CostPredictor {
 
         long estPages = 0;
         long estMem = 0;
-        try (Connection c = ds.getConnection()) {
+        try (Connection c = connections.getConnection(connectionId, schema)) {
             List<String> tables = SqlUtil.extractTableNames(sql);
             for (String t : tables) {
                 try (PreparedStatement ps = c.prepareStatement("SELECT relpages, reltuples FROM pg_class WHERE relname=?")) {
