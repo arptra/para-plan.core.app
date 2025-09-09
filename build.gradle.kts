@@ -17,6 +17,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
     implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation(project(":smart-hints"))
 
     // Важно: чтобы не притащить старые версии testcontainers транзитивно
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

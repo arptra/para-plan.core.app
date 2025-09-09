@@ -1,0 +1,1 @@
+{"sql":"SELECT c.name FROM customers c WHERE c.region_id = 42"}
