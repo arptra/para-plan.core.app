@@ -1,0 +1,3 @@
+{
+  "sql": "SELECT grp, sum(val)\n    FROM big\n    WHERE created >= now() - interval '180 days'\n    GROUP BY grp\n    ORDER BY sum(val) DESC\n    LIMIT 20;\n"
+}

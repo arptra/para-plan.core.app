@@ -3,7 +3,7 @@
 set -euo pipefail
 
 echo "==> Starting PostgreSQL via docker-compose"
-( cd deploy && docker compose up -d )
+( cd deploy && docker-compose up -d )
 
 echo "==> Building and starting Spring Boot app"
 ./gradlew --no-daemon bootRun &

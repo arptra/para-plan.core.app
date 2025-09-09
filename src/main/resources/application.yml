@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/paraplan
+    url: jdbc:postgresql://localhost:5432/demo
     username: paraplan
     password: paraplan
     hikari:

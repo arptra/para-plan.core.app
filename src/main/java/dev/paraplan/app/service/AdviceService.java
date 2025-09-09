@@ -23,6 +23,16 @@ public class AdviceService {
     if (draft.predicted() != null && draft.predicted().ioRisk() >= 2) {
       adv.add("📀 Высокий IO — читается много страниц с диска.");
     }
+    if (draft.lockReport() != null && !"ACCESS SHARE".equals(draft.lockReport().level())) {
+      adv.add("🔒 Уровень блокировки: " + draft.lockReport().level());
+      if (!draft.lockReport().advice().isEmpty()) adv.add("🕒 " + String.join(". ", draft.lockReport().advice()));
+    }
+    if (draft.nPlusOneWarnings() != null && !draft.nPlusOneWarnings().isEmpty()) {
+      adv.add("🐢 " + draft.nPlusOneWarnings().get(0));
+    }
+    if (draft.serverFit() != null) {
+      adv.add("⚙️ work_mem " + draft.serverFit().workMem());
+    }
 
     if (draft.recommendations() != null) {
       draft.recommendations().stream()
@@ -47,6 +57,9 @@ public class AdviceService {
   public record AnalyzeResponseDraft(
       PlanFeatures features,
       PredictedMetrics predicted,
-      List<Recommendation> recommendations
+      List<Recommendation> recommendations,
+      LockReport lockReport,
+      ServerFit serverFit,
+      List<String> nPlusOneWarnings
   ) {}
 }

@@ -1,0 +1,3 @@
+{
+  "sql": "SELECT u.id, u.email, sum(o.amount) total\n    FROM users u\n    JOIN orders o ON o.user_id = u.id\n    WHERE o.created_at >= now() - interval '90 days'\n    GROUP BY u.id, u.email\n    ORDER BY total DESC\n    LIMIT 50;\n"
+}

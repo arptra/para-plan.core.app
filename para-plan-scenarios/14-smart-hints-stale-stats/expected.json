@@ -1,0 +1,8 @@
+[
+  {
+    "start": 19,
+    "end": 28,
+    "message": "Обновить статистику для customers",
+    "replacement": "ANALYZE customers;"
+  }
+]

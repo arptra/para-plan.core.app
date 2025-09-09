@@ -1,4 +1,0 @@
-{
-  "message" : "ERROR: column \"status\" does not exist\n  Позиция: 66",
-  "code" : "PSQL_ERROR"
-}

@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  pg:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: paraplan
+      POSTGRES_PASSWORD: paraplan
+      POSTGRES_DB: demo
+    ports: ["5413:5432"]
+    command: >
+      postgres -c shared_preload_libraries=pg_stat_statements
+               -c pg_stat_statements.track=all
+               -c max_connections=20

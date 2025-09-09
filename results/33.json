@@ -1,4 +1,0 @@
-{
-  "message" : "ERROR: relation \"v_order_value\" does not exist\n  Позиция: 53",
-  "code" : "PSQL_ERROR"
-}

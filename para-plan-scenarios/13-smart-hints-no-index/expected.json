@@ -1,0 +1,8 @@
+[
+  {
+    "start": 34,
+    "end": 44,
+    "message": "Добавить индекс по orders.created_at",
+    "replacement": "CREATE INDEX idx ON orders(created_at);"
+  }
+]

@@ -1,0 +1,2 @@
+-- Rewrite WHERE to enable pruning:
+    -- SELECT count(*) FROM logs WHERE ts >= CURRENT_DATE - INTERVAL '30 days';

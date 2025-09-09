@@ -1,3 +1,18 @@
+                                ██████╗  ██████╗ ██╗    ██╗███████╗██████╗ ███████╗██████╗     ██████╗ ██╗   ██╗                                             
+                                ██╔══██╗██╔═══██╗██║    ██║██╔════╝██╔══██╗██╔════╝██╔══██╗    ██╔══██╗╚██╗ ██╔╝                                             
+                                ██████╔╝██║   ██║██║ █╗ ██║█████╗  ██████╔╝█████╗  ██║  ██║    ██████╔╝ ╚████╔╝                                              
+                                ██╔═══╝ ██║   ██║██║███╗██║██╔══╝  ██╔══██╗██╔══╝  ██║  ██║    ██╔══██╗  ╚██╔╝                                               
+                                ██║     ╚██████╔╝╚███╔███╔╝███████╗██║  ██║███████╗██████╔╝    ██████╔╝   ██║                                                
+                                ╚═╝      ╚═════╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝     ╚═════╝    ╚═╝                                                
+
+    ██████╗ ██╗███████╗ ██████╗██████╗ ███████╗████████╗███████╗         ██╗      ████████╗ █████╗ ██████╗ ██╗   ██╗██████╗ ███████╗████████╗██╗  ██╗ █████╗ 
+    ██╔══██╗██║██╔════╝██╔════╝██╔══██╗██╔════╝╚══██╔══╝██╔════╝         ╚██╗     ╚══██╔══╝██╔══██╗██╔══██╗██║   ██║██╔══██╗██╔════╝╚══██╔══╝██║ ██╔╝██╔══██╗   
+    ██║  ██║██║███████╗██║     ██████╔╝█████╗     ██║   █████╗      █████╗╚██╗       ██║   ███████║██████╔╝██║   ██║██████╔╝█████╗     ██║   █████╔╝ ███████║
+    ██║  ██║██║╚════██║██║     ██╔══██╗██╔══╝     ██║   ██╔══╝      ╚════╝██╔╝       ██║   ██╔══██║██╔══██╗██║   ██║██╔══██╗██╔══╝     ██║   ██╔═██╗ ██╔══██║
+    ██████╔╝██║███████║╚██████╗██║  ██║███████╗   ██║   ███████╗         ██╔╝        ██║   ██║  ██║██████╔╝╚██████╔╝██║  ██║███████╗   ██║   ██║  ██╗██║  ██║
+    ╚═════╝ ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝         ╚═╝         ╚═╝   ╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
+---
+
 # PARA-PLAN — доказательство работоспособности анализатора
 
 Этот README содержит **полный набор SQL-запросов**, **сценарии моделирования состояний БД** и **скрипты проверки**, демонстрирующие,
@@ -45,6 +60,163 @@ curl -s -X POST http://localhost:8080/api/analyze \  -H 'Content-Type: applicati
 ```
 
 ---
+## Пример полного флоу через API
+
+```bash
+# 1) создаём подключение к PostgreSQL (jdbcUrl соберётся автоматически)
+curl -s -X POST http://localhost:8080/connections \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "host":"db", "port":5432,
+        "database":"app", "user":"u", "password":"p",
+        "info":"описание (опц.)"
+      }'
+# -> {"id":"conn-1"}
+
+# 2) смотрим список активных подключений
+curl -s http://localhost:8080/connections | jq
+
+# 3) отправляем запрос на анализ в конкретную БД/схему
+curl -s -X POST http://localhost:8080/api/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"public",
+        "sql":"SELECT * FROM orders WHERE id=1"
+      }' | jq '.predicted'
+
+# 4) запрашиваем умные подсказки для той же БД/схемы
+curl -s -X POST http://localhost:8080/api/sql-hints \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"public",
+        "sql":"SELECT * FROM orders WHERE id=1"
+      }' | jq
+
+# 5) при необходимости меняем схему во время запроса
+curl -s -X POST http://localhost:8080/api/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"analytics",
+        "sql":"SELECT * FROM events"
+      }'
+```
+
+---
+## SQL hints API
+
+Модуль `smart-hints` вызывает `/api/analyze`, считывает рекомендации и подсвечивает проблемные места прямо в исходном SQL.
+
+Ниже несколько сценариев с разными состояниями БД и примерами подсветки.
+
+Запрос можно передавать как JSON или как сырую строку. Для файла с чистым SQL используйте:
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints \
+  -H 'Content-Type: text/plain' \
+  --data-binary @slow-query.sql | jq
+```
+
+> **Важно:** перед именем файла должен стоять символ `@`; без него `curl` отправит строку `slow-query.sql` как тело запроса, что вызовет ошибку разбора JSON.
+
+Аналогичный вызов с JSON:
+
+### 1. Нет индекса по условию
+
+До выполнения `sql/states/01_index_time.sql` столбец `orders.created_at` не индексирован.
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints   -H 'Content-Type: application/json'   -d '{"sql":"SELECT o.id FROM orders o WHERE o.created_at > now()"}' | jq
+```
+
+```json
+[
+  {
+    "start": 34,
+    "end": 44,
+    "message": "Добавить индекс по orders.created_at",
+    "replacement": "CREATE INDEX idx ON orders(created_at);"
+  }
+]
+```
+
+### 2. Устаревшая статистика
+
+После `psql "$PGURL" -f sql/states/06_stale_stats.sql` анализатор советует обновить статистику.
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints   -H 'Content-Type: application/json'   -d '{"sql":"SELECT c.name FROM customers c WHERE c.region_id = 42"}' | jq
+```
+
+```json
+[
+  {
+    "start": 19,
+    "end": 28,
+    "message": "Обновить статистику для customers",
+    "replacement": "ANALYZE customers;"
+  }
+]
+```
+
+### 3. Низкий `work_mem` для сортировки
+
+Для больших сортировок анализатор рекомендует увеличить `work_mem`; подсветка охватывает весь запрос.
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints   -H 'Content-Type: application/json'   -d '{"sql":"SELECT * FROM big_table ORDER BY name"}' | jq
+```
+
+```json
+[
+  {
+    "start": 7,
+    "end": 8,
+    "message": "Avoid SELECT * to reduce scanned data",
+    "replacement": "SELECT column1, column2"
+  },
+  {
+    "start": 0,
+    "end": 37,
+    "message": "Увеличьте work_mem для крупных сортировок",
+    "replacement": "SET work_mem='128MB';"
+  }
+]
+```
+
+### 4. Ведущий wildcard в `LIKE`
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints   -H 'Content-Type: application/json'   -d '{"sql":"SELECT * FROM users WHERE name LIKE ''%foo%''"}' | jq
+```
+
+```json
+[
+  {
+    "start": 7,
+    "end": 8,
+    "message": "Avoid SELECT * to reduce scanned data",
+    "replacement": "SELECT column1, column2"
+  },
+  {
+    "start": 31,
+    "end": 43,
+    "message": "Leading wildcard in LIKE prevents index usage",
+    "replacement": "LIKE 'value%'"
+  },
+  {
+    "start": 31,
+    "end": 43,
+    "message": "Перепишите LIKE на 'foo%'",
+    "replacement": "LIKE '%foo%'"
+  }
+]
+```
+
+---
+
 
 ## 1) Полный набор SQL (готов к /api/analyze)
 
@@ -188,6 +360,23 @@ psql "$PGURL" -f sql/states/<script>.sql
 - `sql/states/13_planner_toggle_hash_off.sql` (в сессии)
 - Эффект: `landscape.variants` фиксирует, как растёт стоимость при отключении hash join — показатель «робастности».
 
+### 2.10 LockAdvisor (демо)
+- `UPDATE orders SET amount = amount WHERE id < 10;`
+- Ответ содержит `locks.level = ROW EXCLUSIVE`, `locks.estimatedMs ~ p95` и советы `off-hours/lock_timeout`.
+- Переписанный запрос с меньшим диапазоном снижает длительность блокировки.
+
+### 2.11 N+1 detector
+- `SELECT c.id, (SELECT count(*) FROM orders o WHERE o.customer_id=c.id) FROM customers c;`
+- Анализ выдаёт предупреждение `nPlusOne` и рекомендацию «JOIN + GROUP BY».
+- После переписывания на `LEFT JOIN ... GROUP BY` предупреждение исчезает и `p95ms` падает.
+
+### 2.12 Server Fit
+- Для запросов по миллионам строк анализатор рекомендует `work_mem 128-512MB`, `shared_buffers 25-40% RAM`.
+- Для малых запросов советует `work_mem 4-32MB`, экономя память.
+
+### 2.13 CI-пороги
+- Примеры конфигов в `ci/github-action-example.yml` и `ci/gitlab-ci-example.yml` ломают билд, если `p95ms > 200`, `ioRisk > 60` или `robustnessScore < 0.5`.
+
 ---
 
 ## 3) Скрипты запуска
@@ -231,3 +420,26 @@ curl -s -X POST http://localhost:8080/api/analyze \  -H 'Content-Type: applicati
 ```
 
 > Для батч-запуска используй `scripts/run-all.sh` — он обойдёт все запросы из `scenarios/*.json`.
+
+---
+
+## Smart hints module
+
+Модуль `smart-hints` позволяет автоматически находить места в коде, которые соответствуют текстовому запросу.
+Он включает примитивный парсер запроса, поиск по исходникам и формирование подсказок с указанием файла и номера строки.
+
+### Пример использования
+
+```java
+import dev.paraplan.hints.Hint;
+import dev.paraplan.hints.HintService;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+HintService service = new HintService();
+Path repo = Paths.get(".");
+List<Hint> hints = service.generate("Application class", repo);
+hints.forEach(h -> System.out.printf("%s:%d %s%n", h.file(), h.line(), h.snippet()));
+```
+
+Вызов выведет подсказки и подсветит соответствующие строки в репозитории.

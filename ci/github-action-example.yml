@@ -1,0 +1,21 @@
+name: plan-check
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew test
+      - name: enforce thresholds
+        run: |
+          DATA=$(cat results/latest.json)
+          P95=$(echo "$DATA" | jq '.predicted.p95ms')
+          IO=$(echo "$DATA" | jq '.predicted.ioRisk')
+          ROB=$(echo "$DATA" | jq '.landscape.robustnessScore')
+          if [ "$P95" -gt 200 ] || [ "$IO" -gt 60 ] || (( $(echo "$ROB < 0.5" | bc -l) )); then
+            echo "thresholds exceeded" && exit 1
+          fi
