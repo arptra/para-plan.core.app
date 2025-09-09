@@ -3,12 +3,6 @@ server:
   port: 8080
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5401/demo
-    username: paraplan
-    password: paraplan
-    hikari:
-      maximum-pool-size: 4
   jackson:
     serialization:
       INDENT_OUTPUT: true
