@@ -54,7 +54,7 @@ public class AnalyzeController {
     LandscapeReport landscape = landscapeService.scan(connectionId, schema, sql);
     SelectivityReport selectivity = probeService.probe(connectionId, schema, sql);
     int samples = req.options() != null && req.options().mcSamples() != null ? req.options().mcSamples() : 25;
-    Distribution distribution = monteCarloService.simulate(sql, samples);
+    Distribution distribution = monteCarloService.simulate(connectionId, schema, sql, samples);
 
     var locks = lockAdvisor.analyze(sql, predicted);
     var serverFit = serverFitService.estimate(features);
