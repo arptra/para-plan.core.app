@@ -188,6 +188,23 @@ psql "$PGURL" -f sql/states/<script>.sql
 - `sql/states/13_planner_toggle_hash_off.sql` (в сессии)
 - Эффект: `landscape.variants` фиксирует, как растёт стоимость при отключении hash join — показатель «робастности».
 
+### 2.10 LockAdvisor (демо)
+- `UPDATE orders SET amount = amount WHERE id < 10;`
+- Ответ содержит `locks.level = ROW EXCLUSIVE`, `locks.estimatedMs ~ p95` и советы `off-hours/lock_timeout`.
+- Переписанный запрос с меньшим диапазоном снижает длительность блокировки.
+
+### 2.11 N+1 detector
+- `SELECT c.id, (SELECT count(*) FROM orders o WHERE o.customer_id=c.id) FROM customers c;`
+- Анализ выдаёт предупреждение `nPlusOne` и рекомендацию «JOIN + GROUP BY».
+- После переписывания на `LEFT JOIN ... GROUP BY` предупреждение исчезает и `p95ms` падает.
+
+### 2.12 Server Fit
+- Для запросов по миллионам строк анализатор рекомендует `work_mem 128-512MB`, `shared_buffers 25-40% RAM`.
+- Для малых запросов советует `work_mem 4-32MB`, экономя память.
+
+### 2.13 CI-пороги
+- Примеры конфигов в `ci/github-action-example.yml` и `ci/gitlab-ci-example.yml` ломают билд, если `p95ms > 200`, `ioRisk > 60` или `robustnessScore < 0.5`.
+
 ---
 
 ## 3) Скрипты запуска

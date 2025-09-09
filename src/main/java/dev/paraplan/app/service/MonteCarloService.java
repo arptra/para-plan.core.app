@@ -21,7 +21,7 @@ public class MonteCarloService {
         for (int i=0;i<samples;i++) {
             String json = explain.explainJson(sql);
             PlanFeatures f = explain.parse(json, sql);
-            PredictedMetrics pm = predictor.predict(f);
+            PredictedMetrics pm = predictor.predict(sql, f);
             long jitter = (long)(pm.p50ms() * (0.8 + rnd.nextDouble()*0.8));
             lat.add(pm.p50ms() + jitter/10);
         }
