@@ -14,12 +14,12 @@ public class MonteCarloService {
         this.predictor = predictor; this.explain = explain;
     }
 
-    public Distribution simulate(String sql, int samples) throws Exception {
+    public Distribution simulate(String connectionId, String schema, String sql, int samples) throws Exception {
         samples = Math.max(10, Math.min(200, samples));
         Random rnd = new Random(42);
         List<Long> lat = new ArrayList<>();
         for (int i=0;i<samples;i++) {
-            String json = explain.explainJson(sql);
+            String json = explain.explainJson(connectionId, schema, sql);
             PlanFeatures f = explain.parse(json, sql);
             PredictedMetrics pm = predictor.predict(f);
             long jitter = (long)(pm.p50ms() * (0.8 + rnd.nextDouble()*0.8));

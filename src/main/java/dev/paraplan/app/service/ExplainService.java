@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.paraplan.app.model.PlanFeatures;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,12 +12,12 @@ import java.util.Locale;
 
 @Service
 public class ExplainService {
-    private final DataSource ds;
+    private final ConnectionManager connections;
     private static final ObjectMapper M = new ObjectMapper();
-    public ExplainService(DataSource ds) { this.ds = ds; }
+    public ExplainService(ConnectionManager connections) { this.connections = connections; }
 
-    public String explainJson(String sql) throws Exception {
-        try (Connection c = ds.getConnection();
+    public String explainJson(String connectionId, String schema, String sql) throws Exception {
+        try (Connection c = connections.getConnection(connectionId, schema);
              PreparedStatement ps = c.prepareStatement("EXPLAIN (FORMAT JSON, COSTS, BUFFERS) " + sql)) {
             try (ResultSet rs = ps.executeQuery()) {
                 StringBuilder sb = new StringBuilder();
@@ -29,8 +28,8 @@ public class ExplainService {
     }
 
     public PlanFeatures parse(String explainJson, String originalSql) throws Exception {
-        com.fasterxml.jackson.databind.JsonNode root = M.readTree(explainJson);
-        com.fasterxml.jackson.databind.JsonNode plan = root.get(0).get("Plan");
+        JsonNode root = M.readTree(explainJson);
+        JsonNode plan = root.get(0).get("Plan");
         double totalCost = plan.has("Total Cost") ? plan.get("Total Cost").asDouble(0d) : 0d;
         long planRows = plan.has("Plan Rows") ? plan.get("Plan Rows").asLong(0) : 0;
         Walker w = new Walker(); w.walk(plan);

@@ -42,14 +42,16 @@ public class AnalyzeController {
 
   @PostMapping("/analyze")
   public AnalyzeResponse analyze(@RequestBody AnalyzeRequest req) throws Exception {
+    String connId = req.connectionId();
+    String schema = req.schema();
     String sql = req.sql();
-    String json = explainService.explainJson(sql);
+    String json = explainService.explainJson(connId, schema, sql);
     PlanFeatures features = explainService.parse(json, sql);
     PredictedMetrics predicted = costPredictor.predict(features);
-    LandscapeReport landscape = landscapeService.scan(sql);
-    SelectivityReport selectivity = probeService.probe(sql);
+    LandscapeReport landscape = landscapeService.scan(connId, schema, sql);
+    SelectivityReport selectivity = probeService.probe(connId, schema, sql);
     int samples = req.options() != null && req.options().mcSamples() != null ? req.options().mcSamples() : 25;
-    Distribution distribution = monteCarloService.simulate(sql, samples);
+    Distribution distribution = monteCarloService.simulate(connId, schema, sql, samples);
 
     List<Recommendation> recs = recommendationService.build(features, predicted);
 
