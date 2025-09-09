@@ -45,6 +45,50 @@ curl -s -X POST http://localhost:8080/api/analyze \  -H 'Content-Type: applicati
 ```
 
 ---
+## Пример полного флоу через API
+
+```bash
+# 1) создаём подключение к PostgreSQL
+curl -s -X POST http://localhost:8080/api/connections \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "host":"db", "port":5432,
+        "database":"app", "user":"u", "password":"p"
+      }'
+# -> {"id":"conn-1"}
+
+# 2) смотрим список активных подключений
+curl -s http://localhost:8080/api/connections | jq
+
+# 3) отправляем запрос на анализ в конкретную БД/схему
+curl -s -X POST http://localhost:8080/api/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"public",
+        "sql":"SELECT * FROM orders WHERE id=1"
+      }' | jq '.predicted'
+
+# 4) запрашиваем умные подсказки для той же БД/схемы
+curl -s -X POST http://localhost:8080/api/sql-hints \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"public",
+        "sql":"SELECT * FROM orders WHERE id=1"
+      }' | jq
+
+# 5) при необходимости меняем схему во время запроса
+curl -s -X POST http://localhost:8080/api/analyze \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "connectionId":"conn-1",
+        "schema":"analytics",
+        "sql":"SELECT * FROM events"
+      }'
+```
+
+---
 ## SQL hints API
 
 Модуль `smart-hints` вызывает `/api/analyze`, считывает рекомендации и подсвечивает проблемные места прямо в исходном SQL.
