@@ -51,6 +51,16 @@ curl -s -X POST http://localhost:8080/api/analyze \  -H 'Content-Type: applicati
 
 Ниже несколько сценариев с разными состояниями БД и примерами подсветки.
 
+Запрос можно передавать как JSON или как сырую строку. Для файла с чистым SQL используйте:
+
+```bash
+curl -s -X POST http://localhost:8080/api/sql-hints \
+  -H 'Content-Type: text/plain' \
+  --data-binary @slow-query.sql | jq
+```
+
+Аналогичный вызов с JSON:
+
 ### 1. Нет индекса по условию
 
 До выполнения `sql/states/01_index_time.sql` столбец `orders.created_at` не индексирован.
