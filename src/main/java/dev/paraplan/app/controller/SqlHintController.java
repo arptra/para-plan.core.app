@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import java.nio.charset.StandardCharsets;
 
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class SqlHintController {
     }
 
     @PostMapping(value = "/sql-hints", consumes = MediaType.ALL_VALUE)
-    public List<SqlHint> hints(@RequestBody String body) throws Exception {
-        String sql = extractSql(body);
+    public List<SqlHint> hints(@RequestBody byte[] body) throws Exception {
+        String sql = extractSql(new String(body, StandardCharsets.UTF_8));
         if (sql == null || sql.isBlank()) {
             throw new IllegalArgumentException("SQL must not be empty");
         }
