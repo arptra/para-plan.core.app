@@ -2,7 +2,7 @@ CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
     CREATE TABLE users(id bigserial PRIMARY KEY, email text, signup_at timestamptz);
     INSERT INTO users(email, signup_at)
     SELECT 'u'||g||'@ex.com', now() - ((random()*1000)::int || ' days')::interval
-    FROM generate_series(1, 300000);
+    FROM generate_series(1, 300000) AS g(g);
     ANALYZE users;
 
     CREATE TABLE orders(id bigserial PRIMARY KEY, user_id bigint, amount numeric, created_at timestamptz);

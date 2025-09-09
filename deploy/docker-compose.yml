@@ -1,6 +1,18 @@
 
 version: "3.9"
 services:
+  app:
+    build:
+      context: ..
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paraplan
+      SPRING_DATASOURCE_USERNAME: paraplan
+      SPRING_DATASOURCE_PASSWORD: paraplan
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+
   db:
     image: postgres:16-alpine
     container_name: paraplan-pg
@@ -12,6 +24,7 @@ services:
       - "5433:5432"
     volumes:
       - ./init:/docker-entrypoint-initdb.d
+      - ../para-plan-scenarios:/para-plan-scenarios:ro
     command: >
       postgres -c shared_preload_libraries=pg_stat_statements
                -c pg_stat_statements.max=10000
