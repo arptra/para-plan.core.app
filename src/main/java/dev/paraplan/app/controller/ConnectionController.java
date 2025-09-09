@@ -19,7 +19,8 @@ public class ConnectionController {
 
     @PostMapping
     public Map<String, String> create(@RequestBody ConnectionRequest req) {
-        String id = registry.create(req.url(), req.username(), req.password());
+        String jdbcUrl = String.format("jdbc:postgresql://%s:%d/%s", req.host(), req.port(), req.database());
+        String id = registry.create(jdbcUrl, req.username(), req.password(), req.info());
         return Map.of("id", id);
     }
 

@@ -48,17 +48,18 @@ curl -s -X POST http://localhost:8080/api/analyze \  -H 'Content-Type: applicati
 ## Пример полного флоу через API
 
 ```bash
-# 1) создаём подключение к PostgreSQL
-curl -s -X POST http://localhost:8080/api/connections \
+# 1) создаём подключение к PostgreSQL (jdbcUrl соберётся автоматически)
+curl -s -X POST http://localhost:8080/connections \
   -H 'Content-Type: application/json' \
   -d '{
         "host":"db", "port":5432,
-        "database":"app", "user":"u", "password":"p"
+        "database":"app", "user":"u", "password":"p",
+        "info":"описание (опц.)"
       }'
 # -> {"id":"conn-1"}
 
 # 2) смотрим список активных подключений
-curl -s http://localhost:8080/api/connections | jq
+curl -s http://localhost:8080/connections | jq
 
 # 3) отправляем запрос на анализ в конкретную БД/схему
 curl -s -X POST http://localhost:8080/api/analyze \

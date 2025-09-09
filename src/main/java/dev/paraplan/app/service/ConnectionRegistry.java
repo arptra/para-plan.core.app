@@ -20,7 +20,7 @@ public class ConnectionRegistry {
     private final Map<String, HikariDataSource> sources = new ConcurrentHashMap<>();
     private final Map<String, ConnectionInfo> infos = new ConcurrentHashMap<>();
 
-    public String create(String url, String username, String password) {
+    public String create(String url, String username, String password, String info) {
         HikariConfig cfg = new HikariConfig();
         cfg.setJdbcUrl(url);
         cfg.setUsername(username);
@@ -30,7 +30,7 @@ public class ConnectionRegistry {
         HikariDataSource ds = new HikariDataSource(cfg);
         String id = UUID.randomUUID().toString();
         sources.put(id, ds);
-        infos.put(id, new ConnectionInfo(id, url, username));
+        infos.put(id, new ConnectionInfo(id, url, username, info));
         return id;
     }
 

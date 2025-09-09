@@ -47,9 +47,11 @@ class ParaPlanIntegrationIT {
     private String createConnection() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        Map<String, String> payload = Map.of(
-                "url", PG.getJdbcUrl(),
-                "username", PG.getUsername(),
+        Map<String, Object> payload = Map.of(
+                "host", PG.getHost(),
+                "port", PG.getMappedPort(5432),
+                "database", PG.getDatabaseName(),
+                "user", PG.getUsername(),
                 "password", PG.getPassword()
         );
         ResponseEntity<Map> resp = rest.postForEntity("http://localhost:" + port + "/connections",
